@@ -7,15 +7,14 @@ You need Xcode command-line tools from Apple in order to install Home Brew. You 
 
 Step 2: Install Home Brew
 
-Home Brew is the package manager for OS X that makes it easy to install the required packages needed for PCem to compile successfully. You can get it from https://brew.sh or run the following command from a Terminal shell:
-CODE: SELECT ALL
+Home Brew is the package manager for macOS that makes it easy to install the required packages needed for PCem to compile successfully. You can get it from https://brew.sh or run the following command from a Terminal shell:
+
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
 Step 3: Install the required packages needed by PCem
 
-In order to compile PCem on macOS you'll need sdl2, wxmac and openal-soft packages. You can install theses with the following commands
+In order to compile PCem on macOS you'll need sdl2, wxmac and openal-soft packages (Note: Later versions of macOS already have openal-soft so you may not need to install it using Home Brew). You can install theses with the following commands:
 
-Note: Later versions of macOS already have openal-soft so you may not need to install it using Home Brew
-CODE: SELECT ALL
 brew install sdl2
 brew install wxmac
 brew install openal-soft
