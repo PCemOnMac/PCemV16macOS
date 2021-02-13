@@ -1,6 +1,7 @@
 #define _LARGEFILE_SOURCE
 #define _LARGEFILE64_SOURCE
 #define _GNU_SOURCE
+#define off64_t off_t
 #include <errno.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -20,6 +21,14 @@
 
 
 #define IDE_TIME (TIMER_USEC*10)//(5 * 100 * (1 << TIMER_SHIFT))
+
+/*Rough estimate - MFM drives spin at 3600 RPM, with 17 sectors per track,
+  meaning (3600/60)*17 = 1020 sectors per second, or 980us per sector.
+
+  This is required for OS/2 on slow 286 systems, as the hard drive formatter
+  will crash with 'internal processing error' if write sector interrupts are too
+  close in time*/
+#define SECTOR_TIME (TIMER_USEC * 980)
 
 #define STAT_ERR		0x01
 #define STAT_INDEX		0x02
@@ -46,7 +55,7 @@
 #define CMD_DIAGNOSE                    0x90
 #define CMD_SET_PARAMETERS              0x91
 
-extern char ide_fn[4][512];
+extern char ide_fn[7][512];
 
 typedef struct mfm_drive_t
 {
@@ -70,7 +79,7 @@ typedef struct mfm_t
         uint16_t buffer[256];
         int irqstat;
         
-        int callback;
+        pc_timer_t callback_timer;
         
         mfm_drive_t drives[2];
 } mfm_t;
@@ -215,18 +224,14 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
 //                        pclog("Restore\n");
                         mfm->command &= ~0x0f; /*Mask off step rate*/
                         mfm->status = STAT_BUSY;
-                        timer_clock();
-                        mfm->callback = 200*IDE_TIME;
-                        timer_update_outstanding();
+                        timer_set_delay_u64(&mfm->callback_timer, 200*IDE_TIME);
                         break;
                         
                         case CMD_SEEK:
 //                        pclog("Seek to cylinder %i\n", mfm->cylinder);
                         mfm->command &= ~0x0f; /*Mask off step rate*/
                         mfm->status = STAT_BUSY;
-                        timer_clock();
-                        mfm->callback = 200*IDE_TIME;
-                        timer_update_outstanding();
+                        timer_set_delay_u64(&mfm->callback_timer, 200*IDE_TIME);
                         break;
                         
                         default:
@@ -239,9 +244,7 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
                                 if (val & 2)
                                         fatal("Read with ECC\n");
                                 mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 200*IDE_TIME;
-                                timer_update_outstanding();
+                                timer_set_delay_u64(&mfm->callback_timer, 200*IDE_TIME);
                                 break;
 
                                 case CMD_WRITE: case CMD_WRITE+1:
@@ -258,9 +261,7 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
 //                                pclog("Read verify %i sectors from sector %i cylinder %i head %i\n",mfm->secount,mfm->sector,mfm->cylinder,mfm->head);
                                 mfm->command &= ~1;
                                 mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 200 * IDE_TIME;
-                                timer_update_outstanding();
+                                timer_set_delay_u64(&mfm->callback_timer, 200 * IDE_TIME);
                                 break;
 
                                 case CMD_FORMAT:
@@ -271,24 +272,18 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
 
                                 case CMD_SET_PARAMETERS: /* Initialize Drive Parameters */
                                 mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 30*IDE_TIME;
-                                timer_update_outstanding();
+                                timer_set_delay_u64(&mfm->callback_timer, 30*IDE_TIME);
                                 break;
 
                                 case CMD_DIAGNOSE: /* Execute Drive Diagnostics */
                                 mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 200*IDE_TIME;
-                                timer_update_outstanding();
+                                timer_set_delay_u64(&mfm->callback_timer, 200*IDE_TIME);
                                 break;
 
                                 default:
                                 pclog("Bad MFM command %02X\n", val);
                                 mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 200*IDE_TIME;
-                                timer_update_outstanding();
+                                timer_set_delay_u64(&mfm->callback_timer, 200*IDE_TIME);
                                 break;
                         }
                 }                
@@ -297,9 +292,7 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
                 case 0x3F6: /* Device control */
                 if ((mfm->fdisk & 4) && !(val & 4))
                 {
-                        timer_clock();
-                        mfm->callback = 500*IDE_TIME;
-                        timer_update_outstanding();
+                        timer_set_delay_u64(&mfm->callback_timer, 500*IDE_TIME);
                         mfm->reset = 1;
                         mfm->status = STAT_BUSY;
 //                        pclog("MFM Reset\n");
@@ -307,9 +300,7 @@ void mfm_write(uint16_t port, uint8_t val, void *p)
                 if (val & 4)
                 {
                         /*Drive held in reset*/
-                        timer_clock();
-                        mfm->callback = 0;
-                        timer_update_outstanding();
+                        timer_disable(&mfm->callback_timer);
                         mfm->status = STAT_BUSY;
                 }
                 mfm->fdisk = val;
@@ -331,9 +322,7 @@ void mfm_writew(uint16_t port, uint16_t val, void *p)
         {
                 mfm->pos = 0;
                 mfm->status = STAT_BUSY;
-                timer_clock();
-              	mfm->callback = 6*IDE_TIME;
-                timer_update_outstanding();
+              	timer_set_delay_u64(&mfm->callback_timer, SECTOR_TIME);
         }
 }
 
@@ -401,10 +390,8 @@ uint16_t mfm_readw(uint16_t port, void *p)
                         if (mfm->secount)
                         {
                                 mfm_next_sector(mfm);
-                                mfm->status = STAT_BUSY;
-                                timer_clock();
-                                mfm->callback = 6*IDE_TIME;
-                                timer_update_outstanding();
+                                mfm->status = STAT_BUSY | STAT_READY | STAT_DSC;
+                                timer_set_delay_u64(&mfm->callback_timer, SECTOR_TIME);
                         }
                 }
         }
@@ -430,7 +417,7 @@ void mfm_callback(void *p)
         off64_t addr;
         
 //        pclog("mfm_callback: command=%02x reset=%i\n", mfm->command, mfm->reset);
-        mfm->callback = 0;
+
         if (mfm->reset)
         {
                 mfm->status = STAT_READY | STAT_DSC;
@@ -562,7 +549,7 @@ void *mfm_init()
         io_sethandler(0x01f1, 0x0007, mfm_read, NULL,      NULL, mfm_write, NULL,       NULL, mfm);
         io_sethandler(0x03f6, 0x0001, NULL,     NULL,      NULL, mfm_write, NULL,       NULL, mfm);
 
-        timer_add(mfm_callback, &mfm->callback, &mfm->callback, mfm);	
+        timer_add(&mfm->callback_timer, mfm_callback, mfm, 0);
         
 	return mfm;
 }

@@ -1,6 +1,11 @@
 #define _LARGEFILE_SOURCE
 #define _LARGEFILE64_SOURCE
 #define _GNU_SOURCE
+#define ftello64 ftello
+#define fseeko64 fseeko
+#define fopen64 fopen
+#define off64_t off_t
+#define fopen64 fopen
 #include <errno.h>
 
 #include "ibm.h"

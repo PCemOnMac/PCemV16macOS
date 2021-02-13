@@ -1,7 +1,10 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <stdlib.h>
-
+#include "ibm.h"
+#include "ide.h"
+#include "cdrom-ioctl.h"
+#include <util.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOBSD.h>
 #include <IOKit/storage/IOCDMedia.h>
@@ -9,11 +12,6 @@
 #include <IOKit/storage/IOCDTypes.h>
 #include <IOKit/storage/IOCDMediaBSDClient.h>
 #include <IOKit/storage/IOMedia.h>
-#undef CR0
-#include "ibm.h"
-#include "ide.h"
-#include "cdrom-ioctl.h"
-#include <util.h>
 #include <errno.h>
 static ATAPI ioctl_atapi;
 
