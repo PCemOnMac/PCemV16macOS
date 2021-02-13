@@ -23,7 +23,7 @@ Step 3: Download the Source Code
 
 Download the source code from this repository and change directory to the PCem install folder.
 
-Example: cd /PCemV16macOS
+Example: cd /PCemV16macOS-master
 
 Step 3: Build PCem
 
