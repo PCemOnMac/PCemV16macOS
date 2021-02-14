@@ -1,6 +1,8 @@
 # PCemV16macOS
 MacOS port of PCem low-level PC hardware emulator PCem V16. Experimental OpenGL 3 port. 
 
+NOTE: Currently PCem will not install or run on macOS 11 Big Sur. It will produce error referring to "implicit declaration of function 'rand' is invalid in C99". I am currently investigating this, but in the meantime these instructions are confirmed as working on macOS Mojave (10.14.6) and Catalina (10.15.7).
+
 Step 1: Install Xcode command-line tools
 
 You need Xcode command-line tools from Apple in order to install Home Brew. You can install Xcode from the App Store or, when you run the Home Brew install script (step 2), it will install the command-line tools for you.
