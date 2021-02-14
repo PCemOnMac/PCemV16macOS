@@ -1,7 +1,7 @@
 # PCemV16macOS
 MacOS port of PCem low-level PC hardware emulator PCem V16. Experimental OpenGL 3 port. 
 
-NOTE: Currently PCem will not install or run on macOS 11 Big Sur. Running the make command will result in an error referring to "implicit declaration of function 'rand' is invalid in C99". I am currently investigating this, but in the meantime these instructions are confirmed as working on macOS Mojave (10.14.6) and Catalina (10.15.7).
+**NOTE: Currently PCem will not install or run on macOS 11 Big Sur. Running the make command will result in an error referring to "implicit declaration of function 'rand' is invalid in C99". I am currently investigating this, but in the meantime these instructions are confirmed as working on macOS Mojave (10.14.6) and Catalina (10.15.7).
 
 Step 1: Install Xcode command-line tools
 
