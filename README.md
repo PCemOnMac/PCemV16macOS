@@ -41,4 +41,4 @@ Assuming the command completes successfully run:
 
 make
 
-This will take a while. You may see some warning messages during the make process but they don't seem to cause any issues with the compile. Once it completes you'll have the pcem executable file in the install folder. To start the program just run ./pcem from the terminal. You will need to obtain the required ROM files for the machine you want to emulate and need at least one valid ROM for pcem to start. These go in the roms folder located in the folder where PCem is installed.
+This will take a while. You may see some warning messages during the make process but they do not seem to cause any issues with the compile. Once it completes you'll have the pcem executable file in the install folder. To start the program just run ./pcem from the terminal. You will need to obtain the required ROM files for the machine you want to emulate and need at least one valid ROM for pcem to start. These go in the roms folder located in the folder where PCem is installed.
