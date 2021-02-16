@@ -23,13 +23,13 @@ brew install wxmac
 
 brew install openal-soft
 
-Step 3: Download the Source Code
+Step 4: Download the Source Code
 
 Download the source code from this repository and change directory to the PCem install folder.
 
 Example: cd /PCemV16macOS-master
 
-Step 3: Build PCem
+Step 5: Build PCem
 
 Run the configuration script:
 
@@ -47,13 +47,13 @@ This will take a while. You may see some warning messages during the make proces
 
 **Under macOS 11 (Big Sur):**
 
-Only follow step 1 if you have previously installed wxmac via Homebrew. 
+Follow the same steps 1-4 as described above for Mojave & Catalina, but ommitting the command to install wxmac via Homebrew.
 
-1. In Terminal run:
+If wxmac is already installed, in Terminal run:
 
 brew uninstall wxmac
 
-(Alternatively, you can go to usr/local/Cellar and move the wxmac folder elsewhere, unless/until you want the unmodified brew version installed again)
+Alternatively, you can go to usr/local/Cellar and move the wxmac folder elsewhere, unless/until you want the unmodified Homebrew version installed again.
 
 2. Download wxmac from source: 
 
