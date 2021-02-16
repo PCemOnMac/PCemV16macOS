@@ -54,9 +54,16 @@ In Mojave or Catalina:
 
 (if you never installed wxmac with Homebrew, skip step 1)
 
+1. In Terminal run:
+
 brew uninstall wxmac
-Download: https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5.1/wxWidgets-3.0.5.1.tar.bz2
+
+2. Download: 
+
+https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5.1/wxWidgets-3.0.5.1.tar.bz2
+
 cd to the wxWidgets folder and run:
+
 ./configure --prefix=/usr/local/Cellar/wxmac/3.0.5.1_1 --enable-clipboard --enable-controls --enable-dataviewctrl --enable-display --enable-dnd --enable-graphics_ctx --enable-std_string --enable-svg --enable-unicode --with-expat --with-libjpeg --with-libpng --with-libtiff --with-opengl --with-osx_cocoa --with-zlib --disable-precomp-headers --disable-monolithic --with-macosx-version-min=10.15 --disable-webview
 
 Then run:
@@ -68,6 +75,7 @@ This creates the wxmac libraries and the path to the config file is:
 /usr/local/Cellar/wxmac/3.0.5.1_1/bin/wx-config
 
 Download my PCemV16 source as above, cd into the folder and run the following configure command:
+
 ./configure --enable-networking --enable-release-build --with-wxdir=/usr/local/Cellar/wxmac/3.0.5.1_1/bin/
 
 Then run:
