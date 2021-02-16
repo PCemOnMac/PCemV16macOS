@@ -47,7 +47,8 @@ This will take a while. You may see some warning messages during the make proces
 
 
 
-*To run PCem on Big Sur (confirmed as working in 11.2.1), follow these exact steps*
+
+**To run PCem on Big Sur (confirmed as working in 11.2.1), follow these exact steps*
 
 In Mojave or Catalina:
 
@@ -80,8 +81,5 @@ On Big Sur:
 Follow steps 1-3 as above, to create an identical installation of wxmac on your Big Sur installation. Alternatively, if you have access to dual installs of macOS, you can copy the wxmac you installed under usr/local/Cellar in Mojave/Catalina and move it to the same location in your Big Sur installation.
 
 Copy across your Pcem executable from Mojave/Catalina and it should run fine, producing the same ROM error, which means you are in business!
-
-
-
 
 
