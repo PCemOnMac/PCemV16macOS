@@ -47,7 +47,7 @@ This will take a while. You may see some warning messages during the make proces
 
 **Under macOS 11 (Big Sur):**
 
-Follow the same steps 1-4 as described above for Mojave & Catalina, but ommitting the command to install wxmac via Homebrew.
+1. Follow the same steps 1-4 as described above for Mojave & Catalina, but ommitting the command to install wxmac via Homebrew.
 
 If wxmac is already installed, in Terminal run:
 
