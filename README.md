@@ -90,4 +90,4 @@ Follow steps 1-3 as above, to create an identical installation of wxmac on your 
 
 Copy across your Pcem executable from Mojave/Catalina and it should run fine, producing the same ROM error, which means you are in business!
 
-
+If a lack of webview functionality in wxmac causes problems for other packages, you can just move the folder temporarily, or delete it and re-install the standard package using Homebrew.
