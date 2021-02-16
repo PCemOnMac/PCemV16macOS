@@ -23,6 +23,8 @@
  */
 
 #include "slirp.h"
+#include <fcntl.h> // for open
+#include <unistd.h> // for close
 
 struct tftp_session {
     int in_use;

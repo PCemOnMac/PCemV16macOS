@@ -41,6 +41,8 @@
 #define WANT_SYS_IOCTL_H
 #include <stdlib.h>
 #include "slirp.h"
+#include <fcntl.h> // for open
+#include <unistd.h> // for close
 
 /* patchable/settable parameters for tcp */
 int 	tcp_mssdflt = TCP_MSS;

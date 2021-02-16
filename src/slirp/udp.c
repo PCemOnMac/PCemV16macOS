@@ -41,6 +41,8 @@
 #include <stdlib.h>
 #include "slirp.h"
 #include "ip_icmp.h"
+#include <fcntl.h> // for open
+#include <unistd.h> // for close
 
 struct udpstat udpstat;
 

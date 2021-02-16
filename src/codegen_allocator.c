@@ -9,6 +9,7 @@
 #include "ibm.h"
 #include "codegen.h"
 #include "codegen_allocator.h"
+#include <stdlib.h>
 
 typedef struct mem_block_t
 {
