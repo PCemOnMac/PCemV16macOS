@@ -17,7 +17,7 @@ Step 3: Install the required packages needed by PCem
 
 In order to compile PCem on macOS you'll need sdl2, wxmac and openal-soft packages (Note: Later versions of macOS already have openal-soft so you may not need to install it using Home Brew). You can install theses with the following commands:
 
-brew install sdl2
+<brew install sdl2>
 
 brew install wxmac
 
